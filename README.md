@@ -10,7 +10,7 @@ _A Django evolution of [Running_Man](https://github.com/bchakanyuka/Running_Man)
 - **Automated GPX File Parsing** - Uses `gpxpy` to parse raw XML GPS files, automatically extracting timestamps, total distance, and duration, and calculating average pace per kilometer.
 - **ORM Aggregation & Leaderboard** - Ranks runners by total club mileage using Django ORM `Sum` and `Count` annotations.
 - **Personal Runner Dashboard** - Authenticated users get a private dashboard to view their run history and securely delete past uploads.
-- **Modern UI Styling** - Clean, responsive frontend built with Tailwind CSS.
+- **Modern UI Styling** - Clean, responsive leaderboard and dashboard pages built with Tailwind CSS.
 
 ## 🛠️ Tech Stack
 
@@ -22,12 +22,17 @@ _A Django evolution of [Running_Man](https://github.com/bchakanyuka/Running_Man)
 
 ## 📸 Screenshots
 
-<!-- Add screenshots here, for example:
-![Leaderboard](docs/screenshots/leaderboard.png)
-![Dashboard](docs/screenshots/dashboard.png)
--->
+### Live Leaderboard
 
-_Coming soon._
+The club leaderboard ranks every runner by total mileage, with GPX import built into the page.
+
+![Leaderboard](docs/screenshots/leaderboard.png)
+
+### Personal Runner Dashboard
+
+Each runner gets a private dashboard with their full upload history, pace per run, and secure deletion.
+
+![Dashboard](docs/screenshots/dashboard.png)
 
 ## 🚀 Getting Started Locally
 
@@ -36,9 +41,8 @@ Follow these steps to set up and run the project on your machine.
 ### 1. Clone the Repository
 
 ```bash
-# TODO: replace with the real repo URL once the project is pushed
-git clone https://github.com/bchakanyuka/REPO-NAME.git
-cd REPO-NAME
+git clone https://github.com/bchakanyuka/running-club.git
+cd running-club
 ```
 
 ### 2. Create and Activate a Virtual Environment
