@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Running Club Leaderboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- Navbar Header -->
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-gray-200">
+            <div>
+                <span class="text-sm text-gray-600">
+                    {% if request.user.is_authenticated %}
+                        Logged in as: <a href="{% url 'profile' %}" class="font-semibold text-blue-600 hover:underline">{{ request.user.username }}</a>
+                    {% else %}
+                        <em>Not logged in</em>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="space-x-3">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="bg-gray-200 text-gray-800 px-3 py-1.5 rounded text-sm font-medium hover:bg-gray-300 transition">My Dashboard</a>
+                    <form action="{% url 'logout' %}" method="POST" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 text-white px-3 py-1.5 rounded text-sm hover:bg-red-600 transition">Log Out</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-blue-600 hover:underline text-sm font-medium mr-2">Log In</a>
+                    <a href="{% url 'signup' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-lg text-sm {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Title Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 flex items-center gap-2">🏆 Running Club Leaderboard</h1>
+            <p class="text-gray-600 mt-1">Track club mileage, check out rival runners, and climb the rankings.</p>
+        </div>
+
+        <!-- GPX Upload Card (Visible only when logged in) -->
+        {% if request.user.is_authenticated %}
+        <div class="bg-white border-2 border-dashed border-gray-300 p-6 rounded-xl mb-8 shadow-sm">
+            <h3 class="font-semibold text-gray-800 mb-2">Import New GPX Run</h3>
+            <form method="POST" enctype="multipart/form-data" class="flex items-center gap-4">
+                {% csrf_token %}
+                <input type="file" name="file" accept=".gpx" required class="block w-text text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition">Upload Run</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Leaderboard Table -->
+        <div class="bg-white shadow rounded-lg overflow-hidden border border-gray-200">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 text-xs uppercase text-gray-600 tracking-wider">
+                        <th class="py-3 px-6">Rank</th>
+                        <th class="py-3 px-6">Runner</th>
+                        <th class="py-3 px-6">Total Distance</th>
+                        <th class="py-3 px-6">Total Runs</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    {% for entry in leaderboard %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-4 px-6 font-bold text-gray-900">#{{ forloop.counter }}</td>
+                        <td class="py-4 px-6 font-medium text-gray-900">{{ entry.user__username }}</td>
+                        <td class="py-4 px-6 text-gray-900 font-semibold">{{ entry.total_distance|floatformat:2 }} km</td>
+                        <td class="py-4 px-6 text-gray-600">{{ entry.total_runs }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-12 text-center text-gray-500">No runs logged yet! Log in and upload a GPX file to kick off the leaderboard.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>
